@@ -4,16 +4,18 @@ const { logger } = require('./middleware/logger')
 const errorHandler = require('./middleware/errorHandling')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const originOptions = require('./config/originOptions')
 
 
 const app = express()
 const PORT = process.env.PORT || 3500
 
 
+
 //middleware
+app.use(cors());
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
 
 app.use(logger)
 app.use('/', express.static(path.join(__dirname, 'public')))
