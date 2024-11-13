@@ -1,10 +1,13 @@
 const express = require('express')
+require('dotenv').config()
 const path = require('path')
-const { logger } = require('./middleware/logger')
+const { logger, logEvents } = require('./middleware/logger')
 const errorHandler = require('./middleware/errorHandling')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const originOptions = require('./config/originOptions')
+const mongoose = require('mongoose')
+const { connectDB } = require('./config/dbConn')
 
 
 const app = express()
@@ -12,8 +15,10 @@ const PORT = process.env.PORT || 3500
 
 
 
+connectDB()
+
 //middleware
-app.use(cors());
+app.use(cors(originOptions));
 app.use(express.json())
 app.use(cookieParser())
 
@@ -34,4 +39,11 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler)
 
-app.listen(PORT, () => console.log(`server running on port ${PORT}`))
+mongoose.connection.once('open', () => {
+    console.log("connected to mongodb")
+    app.listen(PORT, () => console.log(`server running on port ${PORT}`))
+}) //executes only 'once' for an event
+
+mongoose.connection.on('error', (error) => {
+    logEvents(`${error.no} : ${error.code}\t${error.syscall}\t${error.hostname}`, 'mongodbErrLog')
+}) //'on' method listens to a specific event

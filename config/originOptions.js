@@ -5,7 +5,7 @@ const allowedOrigins = require('./allowedOrigins')
 const originOptions = {
     origin: (origin, callback) => {
         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true)
+            callback(null, true) //callback(error, result)
         } else {
             callback(new Error("origin not allowed"))
         }
