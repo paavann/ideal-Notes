@@ -18,13 +18,17 @@ const PORT = process.env.PORT || 3500
 connectDB()
 
 //middleware
-app.use(cors(originOptions));
+app.use(cors(originOptions))
 app.use(express.json())
 app.use(cookieParser())
 
 app.use(logger)
+//route for serving static files using express.static(). this serves css
 app.use('/', express.static(path.join(__dirname, 'public')))
+//route for root/homepage
 app.use('/', require('./routes/root'))
+//user route
+app.use('/users', require('./routes/userRoutes'))
 
 app.all('*', (req, res) => {
     res.status(404)
@@ -45,5 +49,5 @@ mongoose.connection.once('open', () => {
 }) //executes only 'once' for an event
 
 mongoose.connection.on('error', (error) => {
-    logEvents(`${error.no} : ${error.code}\t${error.syscall}\t${error.hostname}`, 'mongodbErrLog')
+    logEvents(`${error.no} : ${error.code}\t${error.syscall}\t${error.hostname}`, 'mongodbErrLog.log')
 }) //'on' method listens to a specific event

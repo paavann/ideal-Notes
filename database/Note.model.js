@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const AutoIncrement = require('mongoose-sequence')('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 //importing mongoose-sequence and initializing it with mongoose
 
 

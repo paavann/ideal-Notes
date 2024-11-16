@@ -7,7 +7,6 @@ const router = express.Router()
 
 router.get('^/$|/index(.html)?', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'index.html'))
-    // ---> the error wasn't shown: res.sendFile(__dirname, '..', 'views', 'index.html').
 });
 
 
